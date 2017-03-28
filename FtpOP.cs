@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*********************************************
+ * 功能描述:FTP通用操作工具基于edtftpnet
+ * 创 建 人:胡庆杰
+ * 日    期:2016-10-1
+ * 
+ ********************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -128,12 +134,12 @@ namespace FTPCtrl
                 string hostInfo = serverUrl.Substring(serverUrl.IndexOf('@') + 1);
                 if (userInfo.Contains(':'))
                 {
-                    userID = userInfo.Substring(0, userInfo.IndexOf(':'));
-                    pwd = userInfo.Substring(userInfo.IndexOf(':') + 1);
+                    userID = Uri.UnescapeDataString(userInfo.Substring(0, userInfo.IndexOf(':')));
+                    pwd = Uri.UnescapeDataString(userInfo.Substring(userInfo.IndexOf(':') + 1));
                 }
                 else
                 {
-                    userID = userInfo;
+                    userID = Uri.UnescapeDataString(userInfo);
                 }
                 if (hostInfo.Contains(':'))
                 {
@@ -163,7 +169,7 @@ namespace FTPCtrl
             if (isFile)
             {
                 //按文件来解析地址
-                pathUrl = pathUrl.Trim('/');
+                pathUrl = Uri.UnescapeDataString(pathUrl.Trim('/'));
                 if (pathUrl.Contains('/'))
                 {
                     dirPath = "/" + pathUrl.Substring(0, pathUrl.LastIndexOf('/'));
@@ -179,7 +185,7 @@ namespace FTPCtrl
             else
             {
                 //按文件夹来解析地址
-                dirPath = "/" + pathUrl.Trim('/');
+                dirPath = "/" + Uri.UnescapeDataString(pathUrl.Trim('/'));
                 fileName = null;
             }
 
@@ -363,7 +369,7 @@ namespace FTPCtrl
         {
             FtpOP op = FtpOP.ParseUrl2FtpOP(url, true);
             op.DeleteDir(op.FileName);
-        } 
+        }
         #endregion
         #endregion
 
